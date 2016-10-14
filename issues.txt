@@ -1,1 +1,1 @@
-cannot delete file folder from atom sidebar
+1. cannot delete file folder from atom sidebar
