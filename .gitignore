@@ -1,0 +1,18 @@
+# dot files
+.*
+!.gitignore
+
+# Odoo source files
+src/
+
+# test
+test/
+
+# virtualenv
+env/
+
+# compiled python files
+*.py[co]
+
+# mac os files
+*DS_Store
