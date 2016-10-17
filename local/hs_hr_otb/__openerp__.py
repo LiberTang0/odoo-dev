@@ -7,5 +7,7 @@
     'category': 'Hengshen HR',
     'version': '1.0.0',
     'depends': ['base'],
-    'data': []
+    'data': [
+        'views/hs_hr_otb_overtime.xml'
+    ]
 }

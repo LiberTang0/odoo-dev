@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<openerp>
+  <data>
+    <act_window id="hs_hr_otb_otto_action" name="Overtime and Time Off" res_model="hs_hr_otb.otto"></act_window>
+
+    <menuitem id="hs_hr_otb_otto_menu" name="Overtime and Time Off" action="hs_hr_otb_otto_action" parent="" sequence="10"></menuitem>
+
+    <record id="hhs_hr_otb_otto_view_form" model="ir.ui.view">
+      <field name="name">Overtime Form</field>
+      <field name="model">hs_hr_otb.overtime</field>
+      <field name="arch" type="xml">
+        <form>
+          <group>
+            <group>
+              <field name="name"></field>
+              <field name="start_time"></field>
+              <field name="period_in_hour"></field>
+            </group>
+            <group>
+              <field name="employee_id"></field>
+              <field name="end_time"></field>
+              <field name="reason"></field>
+            </group>
+          </group>
+        </form>
+      </field>
+    </record>
+  </data>
+</openerp>
