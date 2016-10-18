@@ -4,11 +4,17 @@
   <data>
     <act_window id="hs_hr_otb_otto_action" name="Overtime and Time Off" res_model="hs_hr_otb.otto"></act_window>
 
-    <menuitem id="hs_hr_otb_otto_menu" name="Overtime and Time Off" action="hs_hr_otb_otto_action" parent="" sequence="10"></menuitem>
+    <act_window id="hs_hr_otb_balance_action" name="Time Off Balance" res_model="hs_hr_otb.balance"></act_window>
 
-    <record id="hhs_hr_otb_otto_view_form" model="ir.ui.view">
-      <field name="name">Overtime Form</field>
-      <field name="model">hs_hr_otb.overtime</field>
+    <menuitem id="hs_hr_otb_root_menu" name="Time Off Balance" action="hs_hr_otb_balance_action" parent="" sequence="10"></menuitem>
+
+    <menuitem id="hs_hr_otb_otto_menu" name="Overtime and Time Off" action="hs_hr_otb_otto_action" parent="hs_hr_otb_root_menu" sequence="20"></menuitem>
+
+    <menuitem id="hs_hr_otb_balance_menu" name="Time off Balance" action="hs_hr_otb_balance_action" parent="hs_hr_otb_root_menu" sequence="10"></menuitem>
+
+    <record id="hs_hr_otb_otto_view_form" model="ir.ui.view">
+      <field name="name">Overtime and Time Off Form</field>
+      <field name="model">hs_hr_otb.otto</field>
       <field name="arch" type="xml">
         <form>
           <group>
@@ -16,14 +22,60 @@
               <field name="name"></field>
               <field name="start_time"></field>
               <field name="period_in_hour"></field>
+              <field name="reason"></field>
             </group>
             <group>
               <field name="employee_id"></field>
               <field name="end_time"></field>
-              <field name="reason"></field>
+              <field name="rec_type"></field>
             </group>
           </group>
         </form>
+      </field>
+    </record>
+
+    <record id="hs_hr_otb_otto_view_list" model="ir.ui.view">
+      <field name="name">Overtime and Time Off List</field>
+      <field name="model">hs_hr_otb.otto</field>
+      <field name="arch" type="xml">
+        <tree>
+          <field name="employee_id"></field>
+          <field name="rec_type"></field>
+          <field name="start_time"></field>
+          <field name="end_time"></field>
+          <field name="period_in_hour"></field>
+          <field name="reason"></field>
+        </tree>
+      </field>
+    </record>
+
+    <record id="hs_hr_otb_balance_view_form" model="ir.ui.view">
+      <field name="name">Time Off Balance Form</field>
+      <field name="model">hs_hr_otb.balance</field>
+      <field name="arch" type="xml">
+        <form>
+          <group>
+            <group>
+              <field name="name"></field>
+              <field name="hours"></field>
+            </group>
+            <group>
+              <field name="employee_id"></field>
+            </group>
+          </group>
+        </form>
+      </field>
+    </record>
+
+    <record id="hs_hr_otb_balance_view_tree" model="ir.ui.view">
+      <field name="name">Time Off Balance List</field>
+      <field name="model">hs_hr_otb.balance</field>
+      <field name="arch" type="xml">
+        <tree>
+          <field name="name"></field>
+          <field name="employee_id"></field>
+          <field name="hours"></field>
+        </tree>
       </field>
     </record>
   </data>
