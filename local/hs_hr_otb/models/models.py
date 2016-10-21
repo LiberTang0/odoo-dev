@@ -14,9 +14,6 @@ def get_time_diff_in_hour(start_time_str, end_time_str):
 def get_default_datetime():
     return datetime.combine(datetime.today(), datetime.min.time())
 
-def build_balance_name(employee_name):
-    return employee_name + '-TimeOffBalance'
-
 class BaseAttendanceRecord(models.AbstractModel):
     _name = 'hs_hr_otb.base_attendance_record'
     name = fields.Char(compute='_record_name',store=True)
@@ -77,7 +74,6 @@ class OvertimeAndTimeOff(models.Model):
                 if len(balance) == 0:
                     balance = Balance.create({
                         'employee_id': employee_id,
-                        'name': build_balance_name(employee.name),
                         'hours': 0.0
                     })
                 if delta < 0 and balance.hours - delta < 0:
@@ -140,18 +136,27 @@ class OvertimeAndTimeOff(models.Model):
 
 class Balance(models.Model):
     _name = 'hs_hr_otb.balance'
-    name = fields.Char(compute='_record_name',string='Name',store=True)
+    _rec_name = 'employee_id'
     employee_id = fields.Many2one('res.partner',string='Employee')
     hours = fields.Float(string='Hours',required=True,default=0)
-
-    @api.depends('employee_id')
-    def _record_name(self):
-        self.ensure_one()
-        if self.employee_id:
-            self.name = build_balance_name(self.employee_id.name)
 
 class Adjustment(models.Model):
     _name = 'hs_hr_otb.adjustment'
     employee_id = fields.Many2one('res.partner',string='Employee')
     hours = fields.Float(string='Hours',required=True)
     reason = fields.Char(string='Reason',required=True)
+    rec_type = fields.Selection(
+        string='Type',
+        required=True,
+        default='init',
+        translation=True,
+        selection=[
+        ('init', 'Initialization'),
+        ('pay_in_lieu', 'Pay In Lieu')
+    ])
+
+class Clerk(models.Model):
+    _name = 'hs_hr_otb.clerk'
+    name = fields.Char(string='Name',translation=True,size=50,required=True)
+    user_id = fields.Many2many('res.partner',string='User',required=True)
+    manage_depts = fields.Many2one('Manage Departments')
