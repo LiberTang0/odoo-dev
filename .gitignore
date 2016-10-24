@@ -16,3 +16,10 @@ env/
 
 # mac os files
 *DS_Store
+
+# introduced modules
+local/hs_erp
+local/hs_itm
+hs_itm_asset
+hs_itm_task
+hs_itm_todo

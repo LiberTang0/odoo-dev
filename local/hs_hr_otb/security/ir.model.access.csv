@@ -1,0 +1,6 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+hs_hr_otb_clerk_access_otto,hs_hr_otb_clerk_access_otto,hs_hr_otb.model_hs_hr_otb_otto,hs_hr_otb.group_hs_hr_otb_clerk,1,1,1,1
+base_user_access_otto,base_user_access_otto,hs_hr_otb.model_hs_hr_otb_otto,base.group_user,1,0,0,0
+base_user_access_balance,base_user_access_balance,hs_hr_otb.model_hs_hr_otb_balance,,1,0,0,0
+hs_hr_otb_hr_access_adjustment,hs_hr_otb_hr_access_adjustment,hs_hr_otb.model_hs_hr_otb_adjustment,hs_hr_otb.group_hs_hr_otb_hr,1,1,1,1
+hs_hr_otb_hr_access_clerk,hs_hr_otb_hr_access_clerk,hs_hr_otb.model_hs_hr_otb_clerk,hs_hr_otb.group_hs_hr_otb_hr,1,1,1,1

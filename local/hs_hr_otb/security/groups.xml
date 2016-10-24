@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<openerp>
+  <data noupdate="0">
+    <record id="group_hs_hr_otb_clerk" model="res.groups">
+        <field name="name">Overtime and Time Off Clerk</field>
+        <field name="category_id" ref="base.module_category_hengshen_hr"/>
+        <field name="comment">Clerk for department overtime and time off data management.</field>
+    </record>
+    <record id="group_hs_hr_otb_hr" model="res.groups">
+        <field name="name">Overtime and Time Off HR</field>
+        <field name="category_id" ref="base.module_category_hengshen_hr"/>
+        <field name="comment">HR for department overtime and time off data management.</field>
+    </record>
+    <record id="group_hs_hr_otb_admin" model="res.groups">
+        <field name="name">Overtime and Time Off System Administrator</field>
+        <field name="category_id" ref="base.module_category_hengshen_hr"/>
+        <field name="comment">Administrator overtime and time off data management system.</field>
+        <field name="users" eval="[(4, ref('base.user_root'))]"/>
+    </record>
+  </data>
+</openerp>

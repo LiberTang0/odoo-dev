@@ -2,15 +2,24 @@
 
 <openerp>
   <data>
-    <act_window id="hs_hr_otb_otto_action" name="Overtime and Time Off" res_model="hs_hr_otb.otto"></act_window>
 
     <act_window id="hs_hr_otb_balance_action" name="Time Off Balance" res_model="hs_hr_otb.balance"></act_window>
-
+    
     <menuitem id="hs_hr_otb_root_menu" name="Time Off Balance" action="hs_hr_otb_balance_action" parent="" sequence="10"></menuitem>
+
+    <menuitem id="hs_hr_otb_balance_menu" name="Time off Balance" action="hs_hr_otb_balance_action" parent="hs_hr_otb_root_menu" sequence="10"></menuitem>
+
+    <act_window id="hs_hr_otb_otto_action" name="Overtime and Time Off" res_model="hs_hr_otb.otto"></act_window>
 
     <menuitem id="hs_hr_otb_otto_menu" name="Overtime and Time Off" action="hs_hr_otb_otto_action" parent="hs_hr_otb_root_menu" sequence="20"></menuitem>
 
-    <menuitem id="hs_hr_otb_balance_menu" name="Time off Balance" action="hs_hr_otb_balance_action" parent="hs_hr_otb_root_menu" sequence="10"></menuitem>
+    <act_window id="hs_hr_otb_adjustment_action" name="Adjustment" res_model="hs_hr_otb.adjustment"></act_window>
+
+    <menuitem id="hs_hr_otb_adjustment_menu" name="Adjustment" action="hs_hr_otb_adjustment_action" parent="hs_hr_otb_root_menu" sequence="30"></menuitem>
+
+    <act_window id="hs_hr_otb_clerk_action" name="Clerks" res_model="hs_hr_otb.clerk"></act_window>
+
+    <menuitem id="hs_hr_otb_clerk_menu" name="Clerks" action="hs_hr_otb_clerk_action" parent="hs_hr_otb_root_menu" sequence="40"></menuitem>
 
     <record id="hs_hr_otb_otto_view_form" model="ir.ui.view">
       <field name="name">Overtime and Time Off Form</field>
@@ -64,27 +73,53 @@
         <form>
           <group>
             <group>
-              <field name="name"></field>
-              <field name="hours"></field>
+              <field name="employee_id"></field>
+              <field name="write_date"></field>
             </group>
             <group>
-              <field name="employee_id"></field>
+              <field name="hours"></field>
             </group>
           </group>
         </form>
       </field>
     </record>
 
-    <record id="hs_hr_otb_balance_view_tree" model="ir.ui.view">
+    <record id="hs_hr_otb_balance_view_list" model="ir.ui.view">
       <field name="name">Time Off Balance List</field>
       <field name="model">hs_hr_otb.balance</field>
       <field name="arch" type="xml">
         <tree>
-          <field name="name"></field>
           <field name="employee_id"></field>
           <field name="hours"></field>
+          <field name="write_date"></field>
         </tree>
       </field>
     </record>
+
+    <record id="hs_hr_otb_adjustment_view_list" model="ir.ui.view">
+      <field name="name">Adjustment List</field>
+      <field name="model">hs_hr_otb.adjustment</field>
+      <field name="arch" type="xml">
+        <tree>
+          <field name="employee_id"></field>
+          <field name="rec_type"></field>
+          <field name="hours"></field>
+          <field name="reason"></field>
+        </tree>
+      </field>
+    </record>
+
+    <record id="hs_hr_otb_clerk_view_list" model="ir.ui.view">
+      <field name="name">Clerk List</field>
+      <field name="model">hs_hr_otb.clerk</field>
+      <field name="arch" type="xml">
+        <tree>
+          <field name="name"></field>
+          <field name="user_id"></field>
+          <field name="manage_depts"></field>
+        </tree>
+      </field>
+    </record>
+
   </data>
 </openerp>
