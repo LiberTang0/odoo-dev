@@ -78,17 +78,17 @@ class BaseAttendanceRecord(models.AbstractModel):
     def _check_time_period(self):
         for record in self:
             if get_datetime(record.start_time) >= get_datetime(record.end_time):
-                raise Warning("End time must be later than start time!")
+                raise ValidationError(_("End time must be later than start time!"))
 
     @api.constrains('hours')
     def _check_hours(self):
         print self
         for record in self:
             if record.hours < 0:
-                raise Warning("Hours should be positive!")
+                raise ValidationError(_("Hours should be positive!"))
                 # return False
             elif record.hours % 0.5 != 0:
-                raise Warning("The minimum unit is 0.5 hour!")
+                raise ValidationError(_("The minimum unit is 0.5 hour!"))
                 # return False
         return False
 
@@ -124,13 +124,16 @@ class OvertimeAndTimeOff(models.Model):
                     })
                 if delta < 0 and balance.hours - delta < 0:
                     cr.execute('ROLLBACK TO SAVEPOINT create_otto_record')
-                    raise Warning('There isn\'t enough time off balance left for this employee!')
+                    raise Warning(_('There isn\'t enough time off balance left for this employee!'))
                 else:
                     balance.hours += delta
             return record
         except Exception as e:
             cr.execute('ROLLBACK TO SAVEPOINT create_otto_record')
-            show_uncaught_exception(e)
+            if isinstance(e,ValidationError):
+                raise
+            else:
+                show_uncaught_exception(e)
 
     @api.multi
     def write(self, vals):
@@ -142,7 +145,10 @@ class OvertimeAndTimeOff(models.Model):
             return True
         except Exception as e:
             cr.execute('ROLLBACK')
-            show_uncaught_exception(e)
+            if isinstance(e,ValidationError):
+                raise
+            else:
+                show_uncaught_exception(e)
 
     def unlink(self, cr, uid, ids, context=None):
         cr.execute('SAVEPOINT unlink_otto_record')
@@ -181,7 +187,7 @@ class Adjustment(models.Model):
         for record in self:
             if record.hours % 0.5 != 0:
                 print 'nonono'
-                raise ValidationError("The minimum unit is 0.5 hour!")
+                raise ValidationError(_("The minimum unit is 0.5 hour!"))
 
     @api.model
     def create(self, vals):
@@ -204,7 +210,10 @@ class Adjustment(models.Model):
             return record
         except Exception as e:
             cr.execute('ROLLBACK TO SAVEPOINT create_adjustment_record')
-            show_uncaught_exception(e)
+            if isinstance(e,ValidationError):
+                raise
+            else:
+                show_uncaught_exception(e)
 
     @api.multi
     def write(self, vals):
@@ -214,12 +223,12 @@ class Adjustment(models.Model):
             super(Adjustment, self).write(vals)
             recalculate_balance(cr)
             return True
-        except ValidationError as e:
-            print 'caught validation error'
-            raise e
         except Exception as e:
             cr.execute('ROLLBACK')
-            show_uncaught_exception(e)
+            if isinstance(e,ValidationError):
+                raise
+            else:
+                show_uncaught_exception(e)
 
     def unlink(self, cr, uid, ids, context=None):
         cr.execute('SAVEPOINT unlink_adjustment_record')
@@ -232,6 +241,5 @@ class Adjustment(models.Model):
 
 class Clerk(models.Model):
     _name = 'hs_hr_otb.clerk'
-    name = fields.Char(string='Name',translation=True,size=50,required=True)
-    user_id = fields.Many2many('res.partner',string='User',required=True)
-    manage_depts = fields.Many2many('hr.department',string='Manage Departments')
+    manage_dept = fields.Many2one('hr.department',string='Manage Department')
+    user_id = fields.Many2one('res.partner',string='User',required=True)

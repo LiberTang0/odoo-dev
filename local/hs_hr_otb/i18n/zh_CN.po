@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 9.0c\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-10-24 05:57+0000\n"
-"PO-Revision-Date: 2016-10-24 05:57+0000\n"
+"POT-Creation-Date: 2016-10-25 04:42+0000\n"
+"PO-Revision-Date: 2016-10-25 04:42+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -16,15 +16,9 @@ msgstr ""
 "Plural-Forms: \n"
 
 #. module: hs_hr_otb
-#: model:ir.actions.act_window,name:hs_hr_otb.hs_hr_otb_adjustment_action
-#: model:ir.ui.menu,name:hs_hr_otb.hs_hr_otb_adjustment_menu
-msgid "Adjustment"
-msgstr "调整"
-
-#. module: hs_hr_otb
-#: model:ir.actions.server,name:hs_hr_otb.hs_hr_otb_server_action_archive
-msgid "Archive"
-msgstr "归档"
+#: model:res.groups,comment:hs_hr_otb.group_hs_hr_otb_admin
+msgid "Administrator overtime and time off data management system."
+msgstr "Administrator overtime and time off data management system."
 
 #. module: hs_hr_otb
 #: model:ir.model.fields,field_description:hs_hr_otb.field_hs_hr_otb_base_attendance_record_archived
@@ -33,10 +27,21 @@ msgid "Archived?"
 msgstr "已归档?"
 
 #. module: hs_hr_otb
+#: model:ir.actions.act_window,name:hs_hr_otb.hs_hr_otb_adjustment_action
+#: model:ir.ui.menu,name:hs_hr_otb.hs_hr_otb_adjustment_menu
+msgid "Balance Adjustment"
+msgstr "剩余调休工时调整"
+
+#. module: hs_hr_otb
+#: model:res.groups,comment:hs_hr_otb.group_hs_hr_otb_clerk
+msgid "Clerk for department overtime and time off data management."
+msgstr "部门考勤员"
+
+#. module: hs_hr_otb
 #: model:ir.actions.act_window,name:hs_hr_otb.hs_hr_otb_clerk_action
 #: model:ir.ui.menu,name:hs_hr_otb.hs_hr_otb_clerk_menu
-msgid "Clerks"
-msgstr "考勤员"
+msgid "Clerks Management"
+msgstr "考勤员管理"
 
 #. module: hs_hr_otb
 #: model:ir.model.fields,field_description:hs_hr_otb.field_hs_hr_otb_adjustment_create_uid
@@ -72,10 +77,26 @@ msgid "Employee"
 msgstr "员工"
 
 #. module: hs_hr_otb
+#: model:ir.ui.menu,name:hs_hr_otb.hs_hr_attendance_root_menu
+msgid "Employee Attendance"
+msgstr "员工出勤"
+
+#. module: hs_hr_otb
+#: code:addons/hs_hr_otb/models/models.py:81
+#, python-format
+msgid "End time must be later than start time!"
+msgstr "结束时间必须晚于开始时间"
+
+#. module: hs_hr_otb
 #: model:ir.model.fields,field_description:hs_hr_otb.field_hs_hr_otb_base_attendance_record_start_time
 #: model:ir.model.fields,field_description:hs_hr_otb.field_hs_hr_otb_otto_start_time
 msgid "From"
-msgstr "开始时间"
+msgstr "从"
+
+#. module: hs_hr_otb
+#: model:res.groups,comment:hs_hr_otb.group_hs_hr_otb_hr
+msgid "HR for department overtime and time off data management."
+msgstr "人事考勤管理员"
 
 #. module: hs_hr_otb
 #: model:ir.model.fields,field_description:hs_hr_otb.field_hs_hr_otb_adjustment_hours
@@ -84,6 +105,12 @@ msgstr "开始时间"
 #: model:ir.model.fields,field_description:hs_hr_otb.field_hs_hr_otb_otto_hours
 msgid "Hours"
 msgstr "时数"
+
+#. module: hs_hr_otb
+#: code:addons/hs_hr_otb/models/models.py:88
+#, python-format
+msgid "Hours should be positive!"
+msgstr "时数必须为正数"
 
 #. module: hs_hr_otb
 #: model:ir.model.fields,field_description:hs_hr_otb.field_hs_hr_otb_adjustment_id
@@ -125,13 +152,12 @@ msgid "Last Updated on"
 msgstr "最近更新时间"
 
 #. module: hs_hr_otb
-#: model:ir.model.fields,field_description:hs_hr_otb.field_hs_hr_otb_clerk_manage_depts
-msgid "Manage Departments"
+#: model:ir.model.fields,field_description:hs_hr_otb.field_hs_hr_otb_clerk_manage_dept
+msgid "Manage Department"
 msgstr "管理部门"
 
 #. module: hs_hr_otb
 #: model:ir.model.fields,field_description:hs_hr_otb.field_hs_hr_otb_base_attendance_record_name
-#: model:ir.model.fields,field_description:hs_hr_otb.field_hs_hr_otb_clerk_name
 #: model:ir.model.fields,field_description:hs_hr_otb.field_hs_hr_otb_otto_name
 msgid "Name"
 msgstr "名称"
@@ -141,6 +167,21 @@ msgstr "名称"
 #: model:ir.ui.menu,name:hs_hr_otb.hs_hr_otb_otto_menu
 msgid "Overtime and Time Off"
 msgstr "加班和调休"
+
+#. module: hs_hr_otb
+#: model:res.groups,name:hs_hr_otb.group_hs_hr_otb_clerk
+msgid "Overtime and Time Off Clerk"
+msgstr "部门考勤员组"
+
+#. module: hs_hr_otb
+#: model:res.groups,name:hs_hr_otb.group_hs_hr_otb_hr
+msgid "Overtime and Time Off HR"
+msgstr "人事考勤管理员组"
+
+#. module: hs_hr_otb
+#: model:res.groups,name:hs_hr_otb.group_hs_hr_otb_admin
+msgid "Overtime and Time Off System Administrator"
+msgstr "考勤系统管理员"
 
 #. module: hs_hr_otb
 #: selection:hs_hr_otb.otto,rec_type:0
@@ -165,14 +206,22 @@ msgid "Take Time Off"
 msgstr "调休"
 
 #. module: hs_hr_otb
-#: model:ir.actions.act_window,name:hs_hr_otb.hs_hr_otb_balance_action
-#: model:ir.ui.menu,name:hs_hr_otb.hs_hr_otb_root_menu
-msgid "Time Off Balance"
-msgstr "剩余可调休时数"
+#: code:addons/hs_hr_otb/models/models.py:91
+#: code:addons/hs_hr_otb/models/models.py:190
+#, python-format
+msgid "The minimum unit is 0.5 hour!"
+msgstr "最小计算单位为0.5小时！"
 
 #. module: hs_hr_otb
+#: code:addons/hs_hr_otb/models/models.py:127
+#, python-format
+msgid "There isn't enough time off balance left for this employee!"
+msgstr "该员工没有足够的可用调休时数！"
+
+#. module: hs_hr_otb
+#: model:ir.actions.act_window,name:hs_hr_otb.hs_hr_otb_balance_action
 #: model:ir.ui.menu,name:hs_hr_otb.hs_hr_otb_balance_menu
-msgid "Time off Balance"
+msgid "Time Off Balance"
 msgstr "剩余可调休时数"
 
 #. module: hs_hr_otb

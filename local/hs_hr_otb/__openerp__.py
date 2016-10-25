@@ -8,8 +8,8 @@
     'version': '1.0.0',
     'depends': ['base','hr'],
     'data': [
-        'views/hs_hr_otb_view.xml',
         'security/groups.xml',
         'security/ir.model.access.csv',
+        'views/hs_hr_otb_view.xml',
     ]
 }
