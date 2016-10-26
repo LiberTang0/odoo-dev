@@ -34,6 +34,7 @@
               <field name="reason"></field>
             </group>
             <group>
+              <!-- <field name="employee_id" attrs="{'readonly':[('id','!=',False)]}"></field> -->
               <field name="employee_id"></field>
               <field name="rec_type"></field>
               <field name="hours"></field>
@@ -106,7 +107,7 @@
       <field name="model">hs_hr_otb.clerk</field>
       <field name="arch" type="xml">
         <tree>
-          <field name="manage_dept"></field>
+          <field name="department_id"></field>
           <field name="user_id"></field>
         </tree>
       </field>
@@ -119,7 +120,7 @@
         <form>
           <group>
             <group>
-              <field name="manage_dept"></field>
+              <field name="department_id"></field>
             </group>
             <group>
               <field name="user_id"></field>

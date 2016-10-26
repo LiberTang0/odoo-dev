@@ -15,7 +15,7 @@
     <record id="group_hs_hr_otb_admin" model="res.groups">
         <field name="name">Overtime and Time Off System Administrator</field>
         <field name="category_id" ref="base.module_category_hengshen_hr"/>
-        <field name="comment">Administrator overtime and time off data management system.</field>
+        <field name="comment">Overtime and time off data management system administrator.</field>
         <field name="users" eval="[(4, ref('base.user_root'))]"/>
     </record>
   </data>

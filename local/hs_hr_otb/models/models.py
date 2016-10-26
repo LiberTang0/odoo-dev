@@ -50,10 +50,10 @@ def recalculate_balance(cr):
 class BaseAttendanceRecord(models.AbstractModel):
     _name = 'hs_hr_otb.base_attendance_record'
     name = fields.Char(compute='_record_name',store=True)
-    employee_id = fields.Many2one('hr.employee',string='Employee')
-    start_time = fields.Datetime(string='From',default=get_default_datetime())
-    end_time = fields.Datetime(string='To',default=get_default_datetime())
-    hours = fields.Float(string='Hours')
+    employee_id = fields.Many2one('hr.employee',string='Employee',required=True)
+    start_time = fields.Datetime(string='Start Time',default=get_default_datetime(),required=True)
+    end_time = fields.Datetime(string='End Time',default=get_default_datetime(),required=True)
+    hours = fields.Float(string='Hours',required=True)
     reason = fields.Char(string='Reason')
     # once a record is archived, it cannot be edited or deleted
     archived = fields.Boolean(string='Archived?',default=False)
@@ -82,7 +82,6 @@ class BaseAttendanceRecord(models.AbstractModel):
 
     @api.constrains('hours')
     def _check_hours(self):
-        print self
         for record in self:
             if record.hours < 0:
                 raise ValidationError(_("Hours should be positive!"))
@@ -106,16 +105,17 @@ class OvertimeAndTimeOff(models.Model):
         cr = self.env.cr
         cr.execute('SAVEPOINT create_otto_record')
         try:
-            record = super(OvertimeAndTimeOff, self).create(vals)
             employee_id = int(vals['employee_id'])
-            employee = self.env['res.partner'].search([('id','=',employee_id)])
+            employee = self.env['hr.employee'].search([('id','=',employee_id)])
+            check_clerk_auth(self.env,[employee.department_id.id],self.env.uid)
+            record = super(OvertimeAndTimeOff, self).create(vals)
             delta = 0.0
             if record.rec_type == 'unpaid':
                 delta = record.hours
             elif record.rec_type == 'timeoff':
                 delta = -1 * record.hours
             if delta != 0:
-                Balance = self.env['hs_hr_otb.balance']
+                Balance = self.env['hs_hr_otb.balance'].sudo()
                 balance = Balance.search([('employee_id','=',employee_id)])
                 if len(balance) == 0:
                     balance = Balance.create({
@@ -140,6 +140,9 @@ class OvertimeAndTimeOff(models.Model):
         cr = self.env.cr
         cr.execute('SAVEPOINT write_otto_record')
         try:
+            # employee = self.env['hr.employee'].search([('id','=',employee_id)])
+            employee = self.employee_id
+            check_clerk_auth(self.env,[employee.department_id.id],self.env.user.id)
             super(OvertimeAndTimeOff, self).write(vals)
             recalculate_balance(cr)
             return True
@@ -153,11 +156,23 @@ class OvertimeAndTimeOff(models.Model):
     def unlink(self, cr, uid, ids, context=None):
         cr.execute('SAVEPOINT unlink_otto_record')
         try:
+            env = api.Environment(cr, uid, context)
+            department_ids = []
+            for record in env['hs_hr_otb.otto'].search([('id','in',ids)]):
+                department_id = record.employee_id.department_id.id
+                if not department_id:
+                    raise ValidationError(_('Cannot find %s\'s department') % record.employee_id.name)
+                elif department_id not in department_ids:
+                    department_ids.append(department_id)
+            check_clerk_auth(env,department_ids,uid)
             super(OvertimeAndTimeOff, self).unlink(cr, uid, ids, context)
             recalculate_balance(cr)
         except Exception as e:
             cr.execute('ROLLBACK')
-            show_uncaught_exception(e)
+            if isinstance(e,ValidationError):
+                raise
+            else:
+                show_uncaught_exception(e)
 
 
 
@@ -186,7 +201,6 @@ class Adjustment(models.Model):
     def _check_hours(self):
         for record in self:
             if record.hours % 0.5 != 0:
-                print 'nonono'
                 raise ValidationError(_("The minimum unit is 0.5 hour!"))
 
     @api.model
@@ -196,9 +210,9 @@ class Adjustment(models.Model):
         try:
             record = super(Adjustment, self).create(vals)
             employee_id = int(vals['employee_id'])
-            employee = self.env['res.partner'].search([('id','=',employee_id)])
+            employee = self.env['hr.employee'].search([('id','=',employee_id)])
             hours = float(vals['hours'])
-            Balance = self.env['hs_hr_otb.balance']
+            Balance = self.env['hs_hr_otb.balance'].sudo()
             balance = Balance.search([('employee_id','=',employee_id)])
             if len(balance) == 0:
                 balance = Balance.create({
@@ -237,9 +251,29 @@ class Adjustment(models.Model):
             recalculate_balance(cr)
         except Exception as e:
             cr.execute('ROLLBACK')
-            show_uncaught_exception(e)
+            if isinstance(e,ValidationError):
+                raise
+            else:
+                show_uncaught_exception(e)
 
 class Clerk(models.Model):
     _name = 'hs_hr_otb.clerk'
-    manage_dept = fields.Many2one('hr.department',string='Manage Department')
-    user_id = fields.Many2one('res.partner',string='User',required=True)
+    department_id = fields.Many2one('hr.department',string='Department')
+    user_id = fields.Many2one('res.users',string='User',required=True)
+
+    _sql_constraints = [
+        ('hs_hr_otb_clerk_uniq',
+        'UNIQUE (department_id, user_id)',
+        'Same department attendance clerk already exsits')
+    ]
+
+def check_clerk_auth(env, department_ids, user_id):
+    auth_department_ids = [
+        record.department_id.id for record in env['hs_hr_otb.clerk'].sudo().search([('user_id','=',user_id)])
+    ]
+    user = env['res.users'].search([('id','=',user_id)])
+    # if user is in group_hs_hr_otb_clerk, should check if user has the permission to handle the department's data
+    if env.ref('hs_hr_otb.group_hs_hr_otb_clerk') in user.groups_id and \
+    len(set(department_ids).difference(set(auth_department_ids)))>0:
+        raise ValidationError(_('No sufficient permission for this action!'))
+    return True
