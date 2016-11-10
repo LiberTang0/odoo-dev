@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+  <data>
+    <menuitem id="hs_eas_root_menu" name="EAS"></menuitem>
+
+    <menuitem id="hs_eas_material_root_menu" parent="hs_eas_root_menu" name="Material"></menuitem>
+
+    <act_window id="hs_eas_material_action" res_model="hs.eas.material" name="Materials"></act_window>
+    <menuitem id="hs_eas_material" name="Materials" action="hs_eas_material_action" parent="hs_eas_material_root_menu"></menuitem>
+
+    <menuitem id="hs_eas_measure_root_menu" parent="hs_eas_root_menu" name="Measure"></menuitem>
+
+    <act_window id="hs_eas_measure_unit_action" res_model="hs.eas.measure.unit" name="Measure Units"></act_window>
+    <act_window id="hs_eas_measure_unit_group_action" res_model="hs.eas.measure.unit.group" name="Measure Unit Groups"></act_window>
+    <menuitem id="hs_eas_measure_unit" name="Measure Units" action="hs_eas_measure_unit_action" parent="hs_eas_measure_root_menu"></menuitem>
+    <menuitem id="hs_eas_measure_unit_group" name="Measure Unit Groups" action="hs_eas_measure_unit_group_action" parent="hs_eas_measure_root_menu"></menuitem>
+
+  </data>
+</odoo>
